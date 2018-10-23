@@ -21,13 +21,13 @@ wasted.
 For the case where the consolidation policies rarely merge segments (i.e. few
 inserts/deletes), a higher value will impact performance without any added
 benefits.
-_Background:_
-  With every "commit" or "consolidate" operation a new state of the view
-  internal data-structures is created on disk.
-  Old states/snapshots are released once there are no longer any users
-  remaining.
-  However, the files for the released states/snapshots are left on disk, and
-  only removed by "cleanup" operation.
+
+> With every "commit" or "consolidate" operation a new state of the view
+> internal data-structures is created on disk.
+> Old states/snapshots are released once there are no longer any users
+> remaining.
+> However, the files for the released states/snapshots are left on disk, and
+> only removed by "cleanup" operation.
 
 @RESTSTRUCT{consolidationIntervalMsec,post_api_view_props,integer,optional,uint64}
 Wait at least this many milliseconds between committing view data store
@@ -39,33 +39,33 @@ continue to grow.
 For the case where there are a few inserts/updates, a higher value will impact
 performance and waste disk space for each commit call without any added
 benefits.
-_Background:_
-  For data retrieval ArangoSearch views follow the concept of
-  "eventually-consistent", i.e. eventually all the data in ArangoDB will be
-  matched by corresponding query expressions.
-  The concept of ArangoSearch view "commit" operation is introduced to
-  control the upper-bound on the time until document addition/removals are
-  actually reflected by corresponding query expressions.
-  Once a "commit" operation is complete all documents added/removed prior to
-  the start of the "commit" operation will be reflected by queries invoked in
-  subsequent ArangoDB transactions, in-progress ArangoDB transactions will
-  still continue to return a repeatable-read state.
+
+> For data retrieval ArangoSearch views follow the concept of
+> "eventually-consistent", i.e. eventually all the data in ArangoDB will be
+> matched by corresponding query expressions.
+> The concept of ArangoSearch view "commit" operation is introduced to
+> control the upper-bound on the time until document addition/removals are
+> actually reflected by corresponding query expressions.
+> Once a "commit" operation is complete all documents added/removed prior to
+> the start of the "commit" operation will be reflected by queries invoked in
+> subsequent ArangoDB transactions, in-progress ArangoDB transactions will
+> still continue to return a repeatable-read state.
 
 
 @RESTSTRUCT{consolidationPolicy,post_api_view_props,object,optional,post_api_view_props_consolidation}
 The consolidation policy to apply for selecting which segments should be merged
 (default: {})
-_Background:_
-  With each ArangoDB transaction that inserts documents one or more
-  ArangoSearch internal segments gets created.
-  Similarly for removed documents the segments that contain such documents
-  will have these documents marked as 'deleted'.
-  Over time this approach causes a lot of small and sparse segments to be
-  created.
-  A "consolidation" operation selects one or more segments and copies all of
-  their valid documents into a single new segment, thereby allowing the
-  search algorithm to perform more optimally and for extra file handles to be
-  released once old segments are no longer used.
+
+> With each ArangoDB transaction that inserts documents one or more
+> ArangoSearch internal segments gets created.
+> Similarly for removed documents the segments that contain such documents
+> will have these documents marked as 'deleted'.
+> Over time this approach causes a lot of small and sparse segments to be
+> created.
+> A "consolidation" operation selects one or more segments and copies all of
+> their valid documents into a single new segment, thereby allowing the
+> search algorithm to perform more optimally and for extra file handles to be
+> released once old segments are no longer used.
 
 
 @RESTSTRUCT{type,post_api_view_props_consolidations,string,optional,string}
